@@ -1,0 +1,25 @@
+#gameboard {
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 0 0;
+    justify-content: center;
+}
+
+.box {
+    background: #9E9E9E;
+    border: black 1px solid;
+    border-radius: 5%;
+    width: 180px;
+    height: 180px;
+    margin: 0 auto;
+    margin-top: 0;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.box:hover {
+    background: #FFFFFF;
+    border: grey 1px solid;
+}
