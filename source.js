@@ -2,6 +2,7 @@ const gameBoard = (() => {
     console.log("gameboard initialized")
     let boardVals = [];
     for (let i = 0; i < 9; i++) { boardVals.push(null); }
+    let winner = false;
     
     const getBoard = () => {
         console.log(boardVals);
@@ -42,48 +43,64 @@ const gameBoard = (() => {
             boardVals[0] == boardVals[2]
         ) {
             console.log("Winner!", boardVals[0]);
+            winner = true;
         } else if (
             boardVals[3] != null &&
             boardVals[3] == boardVals[4] &&
             boardVals[3] == boardVals[5] 
         ) {
             console.log("Winner!", boardVals[3]);
+            winner = true;
         } else if (
             boardVals[6] != null &&
             boardVals[6] == boardVals[7] &&
             boardVals[6] == boardVals[8]
         ) {
             console.log("Winner!", boardVals[6]);
+            winner = true;
         } else if (
             boardVals[0] != null &&
             boardVals[0] == boardVals[3] &&
             boardVals[0] == boardVals[6]
         ) {
             console.log("Winner!", boardVals[0]);
+            winner = true;
         } else if (
             boardVals[1] != null &&
             boardVals[1] == boardVals[4] &&
             boardVals[1] == boardVals[7]
         ) {
             console.log("Winner!", boardVals[1]);
+            winner = true;
         } else if (
             boardVals[2] != null &&
             boardVals[2] == boardVals[5] &&
             boardVals[2] == boardVals[8]
         ) {
             console.log("Winner!", boardVals[2]);
+            winner = true;
         } else if (
             boardVals[0] != null &&
             boardVals[0] == boardVals[4] &&
             boardVals[0] == boardVals[8]
         ) {
             console.log("Winner!", boardVals[0]);
+            winner = true;
         } else if (
             boardVals[2] != null &&
             boardVals[2] == boardVals[4] &&
             boardVals[2] == boardVals[6] 
         ) {
             console.log("Winner!", boardVals[2]);
+            winner = true;
+        } else {
+            for (let i = 0; i < boardVals.length; i++) {
+                if (!boardVals[i]) {
+                    break;
+                }
+            }
+            console.log("Tie!");
+            winner = false;
         }
     }
 
