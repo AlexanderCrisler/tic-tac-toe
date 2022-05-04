@@ -1,8 +1,34 @@
+const player = (name, marker) => {
+
+    return {name, marker}
+}
+
+
 const gameBoard = (() => {
     console.log("gameboard initialized")
     let boardVals = [];
     for (let i = 0; i < 9; i++) { boardVals.push(null); }
-    let winner = false;
+    let winner = false; //TODO: Need better gamestate data structure
+    let tie = false;
+
+    const restart = () => {
+        clearBoard();
+        updateDisplay();
+        winner = false;
+        tie = false;
+        initPlayers();       
+    }
+ 
+    let restartBtn = document.getElementById('restart');
+    restartBtn.addEventListener("click", restart);
+
+    const player1 = player("X", "X");
+    const player2 = player("O", "O");
+    
+    const initPlayers = () => {
+        player1.name = prompt("Player 1 Name")
+        player2.name = prompt("Player 2 Name")
+    }
     
     const getBoard = () => {
         console.log(boardVals);
@@ -26,116 +52,117 @@ const gameBoard = (() => {
             document.getElementById('gameboard').appendChild(box);
         }
     }
-    
+
     const updateDisplay = () => {
         for (var i = 0; i < 9; i++) {
-            if (boardVals[i]) {
-                let space = document.getElementById(i);
-                space.textContent = boardVals[i];
-            }
+            let space = document.getElementById(i);
+            space.textContent = boardVals[i];
         }
     }
 
     const checkWin = () => {
+        //TODO: Stop the game when a winner is found
         if (
             boardVals[0] != null &&
             boardVals[0] == boardVals[1] && 
             boardVals[0] == boardVals[2]
         ) {
-            console.log("Winner!", boardVals[0]);
+            window.alert("Winner!", boardVals[0]);
             winner = true;
         } else if (
             boardVals[3] != null &&
             boardVals[3] == boardVals[4] &&
             boardVals[3] == boardVals[5] 
         ) {
-            console.log("Winner!", boardVals[3]);
+            window.alert("Winner!", boardVals[3]);
             winner = true;
         } else if (
             boardVals[6] != null &&
             boardVals[6] == boardVals[7] &&
             boardVals[6] == boardVals[8]
         ) {
-            console.log("Winner!", boardVals[6]);
+            window.alert("Winner!", boardVals[6]);
             winner = true;
         } else if (
             boardVals[0] != null &&
             boardVals[0] == boardVals[3] &&
             boardVals[0] == boardVals[6]
         ) {
-            console.log("Winner!", boardVals[0]);
+            window.alert("Winner!", boardVals[0]);
             winner = true;
         } else if (
             boardVals[1] != null &&
             boardVals[1] == boardVals[4] &&
             boardVals[1] == boardVals[7]
         ) {
-            console.log("Winner!", boardVals[1]);
+            window.alert("Winner!", boardVals[1]);
             winner = true;
         } else if (
             boardVals[2] != null &&
             boardVals[2] == boardVals[5] &&
             boardVals[2] == boardVals[8]
         ) {
-            console.log("Winner!", boardVals[2]);
+            window.alert("Winner!", boardVals[2]);
             winner = true;
         } else if (
             boardVals[0] != null &&
             boardVals[0] == boardVals[4] &&
             boardVals[0] == boardVals[8]
         ) {
-            console.log("Winner!", boardVals[0]);
+            window.alert("Winner!", boardVals[0]);
             winner = true;
         } else if (
             boardVals[2] != null &&
             boardVals[2] == boardVals[4] &&
             boardVals[2] == boardVals[6] 
         ) {
-            console.log("Winner!", boardVals[2]);
+            window.alert("Winner!", boardVals[2]);
             winner = true;
         } else {
-            for (let i = 0; i < boardVals.length; i++) {
-                if (!boardVals[i]) {
-                    break;
-                }
+            if (boardVals.indexOf(null) > -1) {
+                return;
             }
-            console.log("Tie!");
-            winner = false;
+            window.alert("Tie!"); //TODO: Tie should trigger when a winner isn't possible with current board.
+            tie = true;
+        }
+        
+        if (winner || tie) {
+            restart();
+            return;
         }
     }
 
-    return {getBoard, updateBoard, makeBlocks, updateDisplay};
+    let currentPlayer;
+
+    const getCurrentPlayer = (player1, player2) => {
+        if (currentPlayer == player1) {
+            currentPlayer = player2;
+        } else if (currentPlayer == player2) {
+            currentPlayer = player1;
+        } else {
+            currentPlayer = player1;
+        }
+
+        return currentPlayer;
+    }
+
+    const action = (event) => {
+        console.log(event.srcElement.id);
+        let board = gameBoard.getBoard();
+        if (!board[event.srcElement.id]) {
+            gameBoard.updateBoard(event.srcElement.id, getCurrentPlayer(player1, player2).marker);
+        }
+    }
+
+    const clearBoard = () => {
+        boardVals = [];
+        for (let i = 0; i < 9; i++) { boardVals.push(null); }
+    }
+
+    return {initPlayers, getBoard, updateBoard, makeBlocks, updateDisplay};
 })();
 
-const player = (name, marker) => {
 
-    return {name, marker}
-}
-
-const first = player(1, "X");
-const second = player(2, "O");
-
-let currentPlayer;
-
-const getCurrentPlayer = (player1, player2) => {
-    if (currentPlayer == player1) {
-        currentPlayer = player2;
-    } else if (currentPlayer == player2) {
-        currentPlayer = player1;
-    } else {
-        currentPlayer = player1;
-    }
-
-    return currentPlayer;
-}
-
-const action = (event) => {
-    console.log(event.srcElement.id);
-    let board = gameBoard.getBoard();
-    if (!board[event.srcElement.id]) {
-        gameBoard.updateBoard(event.srcElement.id, getCurrentPlayer(first, second).marker);
-    }
-}
-
+gameBoard.initPlayers();
 gameBoard.makeBlocks();
 gameBoard.updateDisplay(gameBoard.getBoard());

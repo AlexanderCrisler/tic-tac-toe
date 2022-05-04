@@ -5,6 +5,12 @@
     justify-content: center;
 }
 
+#restart {
+    width: 10em;
+    margin: 5em auto;
+    display: block;
+}
+
 .box {
     background: #9E9E9E;
     border: black 1px solid;
